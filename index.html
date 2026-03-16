@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tello eSIM 分享整理页</title>
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --paper: #fffdf9;
+      --ink: #1f2937;
+      --muted: #5f6b7a;
+      --line: rgba(31, 41, 55, 0.12);
+      --brand: #0f766e;
+      --brand-soft: rgba(15, 118, 110, 0.1);
+      --warm: #a16207;
+      --warm-soft: rgba(161, 98, 7, 0.08);
+      --shadow: 0 16px 40px rgba(73, 58, 31, 0.1);
+      --radius: 22px;
+      --max: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(161, 98, 7, 0.14), transparent 26%),
+        linear-gradient(180deg, #fbf8f2 0%, #f4eee2 100%);
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--brand);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(15, 118, 110, 0.25);
+    }
+
+    a:hover {
+      color: #0b5d56;
+      border-bottom-color: rgba(11, 93, 86, 0.45);
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 24px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .nav {
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      margin-bottom: 18px;
+      background: rgba(255, 252, 247, 0.86);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: 0 10px 26px rgba(72, 54, 28, 0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav a {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: none;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .hero,
+    .section,
+    .note {
+      background: rgba(255, 253, 248, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 30px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(250,245,235,0.9));
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(30px, 4.7vw, 48px);
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+    }
+
+    .meta,
+    .lead,
+    .section p,
+    li,
+    td,
+    th,
+    small {
+      line-height: 1.82;
+    }
+
+    .meta, .lead, .intro, .note p, .note small { color: var(--muted); }
+    .meta { margin: 0 0 12px; font-size: 14px; }
+    .lead { margin: 0; font-size: 15px; }
+
+    .hero-links,
+    .links,
+    .share-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn,
+    .share-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btn.primary {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    .section {
+      padding: 24px;
+      margin-top: 18px;
+    }
+
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 3.2vw, 34px);
+      letter-spacing: -0.03em;
+    }
+
+    .subhead {
+      margin: 20px 0 10px;
+      font-size: 20px;
+      color: var(--warm);
+    }
+
+    .intro {
+      margin: 0 0 16px;
+      font-size: 15px;
+    }
+
+    .toc {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid var(--line);
+    }
+
+    .toc strong { display: block; margin-bottom: 8px; }
+    .toc ol { margin: 0; padding-left: 18px; }
+    .toc li { margin: 6px 0; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .card {
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid var(--line);
+    }
+
+    .tag {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--warm-soft);
+      color: var(--warm);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .card strong { display: block; margin-bottom: 8px; font-size: 18px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .list,
+    .faq-list,
+    .plain {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .list li,
+    .faq-list li,
+    .plain li { margin: 10px 0; color: var(--muted); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.76);
+    }
+
+    table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      background: rgba(15, 118, 110, 0.08);
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .note {
+      padding: 20px;
+      margin-top: 20px;
+      border-style: dashed;
+    }
+
+    @media (max-width: 720px) {
+      .wrap { width: min(calc(100% - 16px), 1000px); }
+      .hero, .section, .note { padding: 18px; border-radius: 22px; }
+      .nav { top: 8px; border-radius: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="#top">顶部</a>
+      <a href="#what">是什么</a>
+      <a href="#usage">有什么用</a>
+      <a href="#plan">套餐</a>
+      <a href="#buy">如何购买</a>
+      <a href="#activate">激活</a>
+      <a href="#esim-phone">eSIM手机激活</a>
+      <a href="#cn-phone">国行手机</a>
+      <a href="#use">如何使用</a>
+      <a href="#links">网址汇总</a>
+      <a href="#faq">FAQ</a>
+      <a href="#summary">总结</a>
+    </nav>
+
+    <header class="hero" id="top">
+      <div class="eyebrow">分享整理版</div>
+      <h1>美国保号卡 Tello eSIM 购买、激活、使用教程</h1>
+      <p class="meta">整理自原文发布于 2024-11-13 的页面，保留主要正文链接、教程链接、工具链接与官方群入口。</p>
+      <p class="lead">
+        这一页按原文顺序把 Tello eSIM 的购买、激活、使用、Wi‑Fi Calling、国行手机替代方案、常见问题和视频里提到的网址全部重新整理了一遍，目的就是让你更方便分享。正文不再照搬原文，而是按原来的章节顺序做轻量美化和梳理。
+      </p>
+      <div class="hero-links">
+        <a class="btn primary" href="https://www.digitalnomadlc.com/how-to-use-tello-esim-in-china/" target="_blank" rel="noreferrer">查看原文</a>
+        <a class="btn" href="https://tello.com/account/register?_referral=P3HVV448" target="_blank" rel="noreferrer">Tello 邀请链接</a>
+        <a class="btn" href="https://youtu.be/9CNvCMwM7iE" target="_blank" rel="noreferrer">视频教程</a>
+      </div>
+      <div class="toc">
+        <strong>目录</strong>
+        <ol>
+          <li><a href="#what">Tello eSIM 是什么？</a></li>
+          <li><a href="#usage">Tello eSIM 有什么用？</a></li>
+          <li><a href="#plan">Tello eSIM 套餐</a></li>
+          <li><a href="#buy">如何购买 Tello eSIM？</a></li>
+          <li><a href="#activate">激活 Tello eSIM</a></li>
+          <li><a href="#esim-phone">eSIM 手机激活 Tello</a></li>
+          <li><a href="#cn-phone">国行手机激活 Tello</a></li>
+          <li><a href="#use">使用 Tello eSIM</a></li>
+          <li><a href="#links">视频里提到的网址</a></li>
+          <li><a href="#faq">Tello eSIM 常见问题 FAQ</a></li>
+          <li><a href="#summary">总结</a></li>
+        </ol>
+      </div>
+    </header>
+
+    <section class="section" id="what">
+      <h2>1. Tello eSIM 是什么？</h2>
+      <p class="intro">
+        Tello 是一家使用 T-Mobile 网络的美国虚拟运营商，提供实体卡和 eSIM。原文的核心判断是：如果你需要一张可以在中国也能继续通过 Wi‑Fi Calling 收发短信、接打电话的美国号码，Tello eSIM 是比较容易买、也相对便宜的一种选择。
+      </p>
+      <div class="cards">
+        <article class="card">
+          <span class="tag">核心特点</span>
+          <strong>直接在官网买 eSIM</strong>
+          <p>无需邮寄，直接购买后添加到手机即可，这也是它相比很多美国保号方案更省事的地方。</p>
+        </article>
+        <article class="card">
+          <span class="tag">在中国可用</span>
+          <strong>主要依赖 Wi‑Fi Calling</strong>
+          <p>只要连上 Wi‑Fi 或另一张卡的数据网络，就能以 Wi‑Fi Calling 的方式使用短信与通话能力。</p>
+        </article>
+        <article class="card">
+          <span class="tag">原文定位</span>
+          <strong>低成本美国保号卡</strong>
+          <p>原文把它视为美国保号 eSIM 里比较简单、比较便宜的路线，尤其适合人在中国但需要美国号码的人。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="usage">
+      <h2>2. Tello eSIM 有什么用？</h2>
+      <ul class="list">
+        <li>接收美国银行、美国券商等短信验证。</li>
+        <li>注册 AI 工具，如 ChatGPT、Claude。</li>
+        <li>注册 WhatsApp、TikTok、Instagram、Threads、X、Reddit、Facebook、Discord 等国外社交平台。</li>
+        <li>注册美区 Apple ID、Gmail。</li>
+        <li>注册美区 PayPal、Stripe。</li>
+        <li>注册 Google Voice。</li>
+        <li>套餐内可免费拨打国际长途分钟数。</li>
+      </ul>
+    </section>
+
+    <section class="section" id="plan">
+      <h2>3. Tello eSIM 套餐</h2>
+      <p class="intro">原文重点推荐的是最低门槛的 5 美元月租套餐，首月加上开通费用大约 8 美元左右。</p>
+
+      <h3 class="subhead">3.1 Tello eSIM 套餐内容</h3>
+      <ul class="list">
+        <li>支持 100 分钟全球通话，其中可免费拨打 <a href="https://tello.com/free-international-countries" target="_blank" rel="noreferrer">全球 60 多个国家的电话</a>。</li>
+        <li>支持无限收发短信、接听电话。</li>
+        <li>月租 5 美元，原文说明账单地址不在美国时通常不需要税。</li>
+        <li>支持数据漫游，但需要额外充值 <a href="https://tello.com/buy/pay_as_you_go" target="_blank" rel="noreferrer">Pay As You Go Credit</a>。</li>
+        <li>支持携号转网。</li>
+      </ul>
+      <ul class="plain">
+        <li>原文特别提醒：Tello 在中国没有本地合作运营商，因此想要在中国正常收发短信和电话，关键是打开 Wi‑Fi Calling。</li>
+        <li>如果要在中国大陆、香港、台湾、日本等地使用国际漫游流量，需要至少充值 20 美元的 <a href="https://tello.com/buy/pay_as_you_go" target="_blank" rel="noreferrer">Pay As You Go Credit</a>，而且流量很贵，20 美元大约只能用 400MB。</li>
+      </ul>
+
+      <h3 class="subhead">3.2 Tello eSIM 资费</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th>原文整理</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>接收短信</td><td>免费</td></tr>
+            <tr><td>发送短信</td><td>免费</td></tr>
+            <tr><td>接听电话</td><td>免费</td></tr>
+            <tr><td>拨打电话</td><td>100 分钟内免费，超出后按分钟计费</td></tr>
+            <tr><td>流量</td><td>按 MB 计费，原文写的是 0.02 USD / MB</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="buy">
+      <h2>4. 如何购买 Tello eSIM？</h2>
+      <p class="intro">原文这里讲得很细，我把它压成一个顺手可看的购买流程，同时把里面提到的工具链接保留下来。</p>
+      <ul class="list">
+        <li>先确认你的手机支持 eSIM。如果是国行手机，可以先看 <a href="https://esim.5ber.com/?utm_source=nomadlc" target="_blank" rel="noreferrer">5Ber</a> 这类 eSIM 写入工具；原文同时说明 5Ber 已失效，需要自行寻找替代写入工具。</li>
+        <li>打开 <a href="https://tello.com/account/register?_referral=P3HVV448" target="_blank" rel="noreferrer">Tello 官网</a> 注册账号。</li>
+        <li>选择「100 Minutes Text」+「No data」的 5 美元月租套餐。</li>
+        <li>填写美国真实地址。可辅助使用 <a href="https://www.meiguodizhi.com/" target="_blank" rel="noreferrer">美国地址生成器</a> 或 <a href="https://www.google.com/maps/" target="_blank" rel="noreferrer">谷歌地图</a>。</li>
+        <li>选择 eSIM，输入 IMEI。原文给了两个 IMEI 生成器入口：<a href="https://www.imei.info/zh/apple-imei-generator/" target="_blank" rel="noreferrer">苹果</a>、<a href="https://www.imei.info/zh/google-imei-generator/" target="_blank" rel="noreferrer">安卓</a>。</li>
+        <li>填写账单地址与信用卡号后购买，成功后会显示 eSIM 二维码。</li>
+      </ul>
+      <ul class="plain">
+        <li>原文邀请链接：<a href="https://tello.com/account/register?_referral=P3HVV448" target="_blank" rel="noreferrer">https://tello.com/account/register?_referral=P3HVV448</a>，邀请码是 <strong>P3HVV448</strong>。</li>
+        <li>原文提示：一个 Tello 账户可买多个号码；付款支持信用卡、Apple Pay、Google Pay、PayPal。</li>
+        <li>原文还强调：IP、账单地址和支付卡片最好匹配，减少被砍单风险。可用 <a href="https://whatismyipaddress.com/" target="_blank" rel="noreferrer">当前 IP 地址检测</a> 做辅助检查。</li>
+      </ul>
+    </section>
+
+    <section class="section" id="activate">
+      <h2>5. 激活 Tello eSIM</h2>
+      <p class="intro">原文把激活前的准备说得很关键，我这里按步骤整理。</p>
+      <ul class="list">
+        <li>激活前先登录 <a href="https://tello.com/account/login?_referral=P3HVV448" target="_blank" rel="noreferrer">官网</a>，设置 911 地址，路径是 My Settings → Wi‑Fi Calling → Emergency E911 Address。</li>
+        <li>再设置 Security PIN，路径是 My Settings → One-time Mobile App Password。因为 Tello 的 eSIM 二维码只能扫码一次，激活失败时靠这个 PIN 才能重新换领二维码。</li>
+        <li>在中国大陆激活时，需要同时满足两个条件：一是设备支持 eSIM 或有写入工具，二是激活时使用美国 IP（原文说其他国外 IP 也可以，但美国 IP 最稳）。</li>
+      </ul>
+    </section>
+
+    <section class="section" id="esim-phone">
+      <h2>6. eSIM 手机激活 Tello</h2>
+
+      <h3 class="subhead">6.1 外版 iPhone 手机激活 Tello eSIM</h3>
+      <ul class="list">
+        <li>开启美国 IP，原文强调必须是全局模式。</li>
+        <li>打开「设置」→「蜂窝网络」→「添加 eSIM」→ 使用二维码。</li>
+        <li>扫描 Tello eSIM 二维码后等待激活。</li>
+        <li>进入 Tello eSIM，打开「Wi‑Fi Calling / 无限局域网通话」。</li>
+        <li>如果运营商位置出现「Wi‑Fi Calling」或「Carrier using Cellular Data」，就说明激活成功。</li>
+        <li>相关视频：<a href="https://youtu.be/9CNvCMwM7iE" target="_blank" rel="noreferrer">外版 iPhone 激活保姆级视频教程</a></li>
+      </ul>
+
+      <h3 class="subhead">6.2 外版 Android 手机激活 Tello eSIM</h3>
+      <ul class="list">
+        <li>同样先开启美国 IP，并使用全局模式。</li>
+        <li>打开「设置」→「网络和互联网」→「SIM卡」→「添加 SIM 卡」→「设置 eSIM 卡」→ 扫码。</li>
+        <li>等待激活后，进入 Tello eSIM 打开 WLAN 通话。</li>
+        <li>当显示「WLAN 通话」或「Carrier using Cellular Data」时，表示激活成功。</li>
+      </ul>
+    </section>
+
+    <section class="section" id="cn-phone">
+      <h2>7. 国行手机激活 Tello</h2>
+      <p class="intro">原文这里给了两条路：买外版手机，或者走 eSIM 写入工具。后者更省钱，所以原文重点放在写入工具上。</p>
+      <ul class="list">
+        <li>国行手机本身不支持 eSIM，无论是国行 iPhone 还是国产安卓都不行。</li>
+        <li>方案一：购买外版无锁手机。原文更推荐日版或加拿大版 iPhone，因为它们是「实体卡槽 + eSIM」组合；原文明确不建议买美版 iPhone 作为国内主力机。</li>
+        <li>方案二：使用 eSIM 写入工具，例如 <a href="https://esim.5ber.com/?utm_source=nomadlc" target="_blank" rel="noreferrer">5Ber</a>。原文同时提醒 5Ber 已失效，应改用其他写入工具，但教程思路仍可参考：<a href="https://youtu.be/9CNvCMwM7iE" target="_blank" rel="noreferrer">视频教程</a>、<a href="https://www.digitalnomadlc.com/how-to-use-5ber/" target="_blank" rel="noreferrer">文字教程</a></li>
+      </ul>
+    </section>
+
+    <section class="section" id="use">
+      <h2>8. 使用 Tello eSIM</h2>
+      <ul class="list">
+        <li>在中国大陆激活后，Tello 本身没有本地信号是正常的，因为它并没有可直接连接的中国运营商。</li>
+        <li>在中国使用时，主要依赖 Wi‑Fi Calling：让手机连 Wi‑Fi 或另一张卡的数据网络，然后打开 Tello eSIM 的 Wi‑Fi Calling。</li>
+        <li>连接 Wi‑Fi 时，运营商通常显示为 Wi‑Fi Calling / WLAN 通话；连接另一张卡数据时，通常显示为 Carrier using Cellular Data。</li>
+        <li>发短信、收短信、接电话都可用系统自带的短信 / 电话应用。</li>
+        <li>拨打电话有两种方式：一是在 <a href="https://apps.apple.com/app/my-tello/id1017228507" target="_blank" rel="noreferrer">My Tello App</a> 内拨打；二是在手机拨号盘中按「011 + 区号 + 电话号码」格式拨打。</li>
+        <li>如果需要数据漫游，需要提前在官网开启国际漫游开关，并充值 <a href="https://tello.com/buy/pay_as_you_go" target="_blank" rel="noreferrer">Pay As You Go Credits</a>。</li>
+      </ul>
+    </section>
+
+    <section class="section" id="links">
+      <h2>9. 视频里提到的网址</h2>
+      <div class="links">
+        <a href="https://tello.com/account/register?_referral=P3HVV448" target="_blank" rel="noreferrer">Tello eSIM 购买链接</a>
+        <a href="https://www.meiguodizhi.com/" target="_blank" rel="noreferrer">美国地址生成器</a>
+        <a href="https://www.google.com/maps/" target="_blank" rel="noreferrer">谷歌地图</a>
+        <a href="https://www.imei.info/zh/apple-imei-generator/" target="_blank" rel="noreferrer">苹果 IMEI 生成器</a>
+        <a href="https://www.imei.info/zh/google-imei-generator/" target="_blank" rel="noreferrer">安卓 IMEI 生成器</a>
+        <a href="https://whatismyipaddress.com/" target="_blank" rel="noreferrer">当前 IP 地址</a>
+        <a href="https://apps.apple.com/app/my-tello/id1017228507" target="_blank" rel="noreferrer">iOS 版 My Tello</a>
+        <a href="https://youtu.be/BnAqguKMqbw" target="_blank" rel="noreferrer">美区 Apple ID 教程</a>
+        <a href="https://play.google.com/store/apps/details?id=com.tello.ui" target="_blank" rel="noreferrer">Android 版 My Tello</a>
+        <a href="https://youtu.be/jqIFZHArrAE" target="_blank" rel="noreferrer">Google Play 教程</a>
+        <a href="https://esim.5ber.com/?utm_source=nomadlc" target="_blank" rel="noreferrer">5Ber 购买链接</a>
+        <a href="https://youtu.be/9CNvCMwM7iE" target="_blank" rel="noreferrer">5Ber 视频教程</a>
+        <a href="https://www.digitalnomadlc.com/how-to-use-5ber/" target="_blank" rel="noreferrer">5Ber 文字教程</a>
+        <a href="https://tello.com/buy/pay_as_you_go" target="_blank" rel="noreferrer">Pay As You Go Credits</a>
+        <a href="https://tello.com/account/home" target="_blank" rel="noreferrer">Tello 官网首页</a>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <h2>10. Tello eSIM 常见问题 FAQ</h2>
+      <ol class="faq-list">
+        <li><strong>Q1. 如何拨打电话与收发短信？</strong><br>原文建议：拨打电话可以用 My Tello App，也可以用系统电话应用，但系统拨号时需按「011 + 区号 + 电话号码」格式。收发短信用系统短信应用即可。</li>
+        <li><strong>Q2. 如何数据漫游？</strong><br>登录官网后，在 My Settings 打开 Pay As You Go Data 和 International Roaming，然后充值最低 20 美元的 <a href="https://tello.com/buy/pay_as_you_go" target="_blank" rel="noreferrer">Pay As You Go Credits</a>。</li>
+        <li><strong>Q3. 激活失败怎么办？</strong><br>原文说可以重新换领新的 eSIM 二维码。路径是登录官网 → My Settings 设置 Security PIN → My SIM → Get eSIM。</li>
+        <li><strong>Q4. 收不到短信怎么办？</strong><br>重新激活 eSIM 或重新激活 Wi‑Fi Calling。原文再次强调：激活时最好使用美国 IP，而且要全局模式。</li>
+        <li><strong>Q5. 如何联系 Tello 客服？</strong><br>原文给了三个入口：网页版在线客服、My Tello App 内 Contact、电话客服 <code>+1-866-377-0294</code>。</li>
+        <li><strong>Q6. 不想用了如何取消？</strong><br>登录官网 → Dashboard → My Plan → Cancel Plan。原文也建议考虑转入 Google Voice 作为长期保号路径。</li>
+        <li><strong>Q7. 赠送的 10 美元话费在哪？</strong><br>登录网页版官网后，点击 Referral Program 即可查看。</li>
+        <li><strong>Q8. 赠送的 10 美元如何支付次月月租？</strong><br>进入 Dashboard，点击 Renew Now，在页面底部选择 Tello Dollars 使用。原文提到手动续费后，每个月的通话时长会自动叠加。</li>
+      </ol>
+    </section>
+
+    <section class="section" id="summary">
+      <h2>11. 总结</h2>
+      <p class="intro">
+        原文最后的结论很直接：如果你需要一张在中国大陆也能用、支持短信验证、能通过 Wi‑Fi Calling 接打电话、并且购买路径足够简单的美国保号 eSIM，Tello 是一条比较容易上手的路线。
+      </p>
+      <div class="links">
+        <a href="https://t.me/+OG7PQo3CVGw5MmQx" target="_blank" rel="noreferrer">官方群组</a>
+        <a href="https://twitter.com/DigitalNomadLC" target="_blank" rel="noreferrer">推特账号</a>
+        <a href="https://www.youtube.com/@DigitalNomadLC" target="_blank" rel="noreferrer">YouTube</a>
+        <a href="https://t.me/digitalnomadlc" target="_blank" rel="noreferrer">官方频道</a>
+      </div>
+      <ul class="plain" style="margin-top:12px;">
+        <li>下一篇：<a href="https://www.digitalnomadlc.com/how-to-register-and-use-telegram/" target="_blank" rel="noreferrer">2026年如何注册 Telegram 账号？</a></li>
+        <li>上一篇：<a href="https://www.digitalnomadlc.com/how-to-find-foreign-groups-and-channels-on-telegram/" target="_blank" rel="noreferrer">如何搜索 Telegram 外国群组和频道？</a></li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>原文分享入口</h2>
+      <p class="intro">如果你要把原文继续转发，这里保留了几个文章页自带的分享入口。</p>
+      <div class="share-list">
+        <a href="https://www.addtoany.com/add_to/x?linkurl=https%3A%2F%2Fwww.digitalnomadlc.com%2Fhow-to-use-tello-esim-in-china%2F&linkname=%E7%BE%8E%E5%9B%BD%E4%BF%9D%E5%8F%B7%E5%8D%A1%20Tello%20eSIM%20%E8%B4%AD%E4%B9%B0%E3%80%81%E6%BF%80%E6%B4%BB%E3%80%81%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noreferrer">X / Twitter</a>
+        <a href="https://www.addtoany.com/add_to/telegram?linkurl=https%3A%2F%2Fwww.digitalnomadlc.com%2Fhow-to-use-tello-esim-in-china%2F&linkname=%E7%BE%8E%E5%9B%BD%E4%BF%9D%E5%8F%B7%E5%8D%A1%20Tello%20eSIM%20%E8%B4%AD%E4%B9%B0%E3%80%81%E6%BF%80%E6%B4%BB%E3%80%81%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noreferrer">Telegram</a>
+        <a href="https://www.addtoany.com/add_to/reddit?linkurl=https%3A%2F%2Fwww.digitalnomadlc.com%2Fhow-to-use-tello-esim-in-china%2F&linkname=%E7%BE%8E%E5%9B%BD%E4%BF%9D%E5%8F%B7%E5%8D%A1%20Tello%20eSIM%20%E8%B4%AD%E4%B9%B0%E3%80%81%E6%BF%80%E6%B4%BB%E3%80%81%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noreferrer">Reddit</a>
+        <a href="https://www.addtoany.com/add_to/whatsapp?linkurl=https%3A%2F%2Fwww.digitalnomadlc.com%2Fhow-to-use-tello-esim-in-china%2F&linkname=%E7%BE%8E%E5%9B%BD%E4%BF%9D%E5%8F%B7%E5%8D%A1%20Tello%20eSIM%20%E8%B4%AD%E4%B9%B0%E3%80%81%E6%BF%80%E6%B4%BB%E3%80%81%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a href="https://www.addtoany.com/add_to/facebook?linkurl=https%3A%2F%2Fwww.digitalnomadlc.com%2Fhow-to-use-tello-esim-in-china%2F&linkname=%E7%BE%8E%E5%9B%BD%E4%BF%9D%E5%8F%B7%E5%8D%A1%20Tello%20eSIM%20%E8%B4%AD%E4%B9%B0%E3%80%81%E6%BF%80%E6%B4%BB%E3%80%81%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.addtoany.com/add_to/linkedin?linkurl=https%3A%2F%2Fwww.digitalnomadlc.com%2Fhow-to-use-tello-esim-in-china%2F&linkname=%E7%BE%8E%E5%9B%BD%E4%BF%9D%E5%8F%B7%E5%8D%A1%20Tello%20eSIM%20%E8%B4%AD%E4%B9%B0%E3%80%81%E6%BF%80%E6%B4%BB%E3%80%81%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+    </section>
+
+    <section class="note">
+      <p><strong>来源说明：</strong>本页根据原文《美国保号卡 Tello eSIM 购买、激活、使用教程》进行顺序整理和轻量美化，原文地址：<a href="https://www.digitalnomadlc.com/how-to-use-tello-esim-in-china/" target="_blank" rel="noreferrer">https://www.digitalnomadlc.com/how-to-use-tello-esim-in-china/</a></p>
+      <small>这页的目标是方便你分享，所以重点保留了正文里的主要购买链接、工具链接、App 链接、视频链接和官方群入口，而不是重新做成完全不同的专题页。</small>
+    </section>
+  </div>
+</body>
+</html>
